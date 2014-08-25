@@ -1,1 +1,1 @@
-[] execVM "scripts\medix\init.sqf";
+[] execVM "medix\init.sqf";

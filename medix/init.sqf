@@ -6,10 +6,10 @@ MEDIX_ACTIVE = false;
 MEDIX_ABORT = false;
 
 // Load properties
-[] execVM "scripts\medix\properties.sqf";
+[] execVM "medix\properties.sqf";
 
 // Setup effects
-[] execVM "scripts\medix\effects.sqf";
+[] execVM "medix\effects.sqf";
 
 
 // Functions
@@ -308,7 +308,7 @@ while {true} do
 	player addAction ["Suicide", MEDIX_SUICIDE, nil, 1, true, true, "", "_target == player && (player getVariable ""MEDIX_ISBLEEDING"")"];
 	
 	// Load handlers
-	[] execVM "scripts\medix\handlers.sqf";
+	[] execVM "medix\handlers.sqf";
 
 	// Activate Medix
 	MEDIX_ACTIVE = true;
