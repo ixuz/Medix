@@ -312,7 +312,7 @@ while {true} do
 
 	// Activate Medix
 	MEDIX_ACTIVE = true;
-	hint format["Medix wounding system 1.5"];
+	hint format["Medix wounding system 1.6"];
 
 	// The loop waits here until the player have died.
 	waitUntil { sleep 0.5; !alive player};
