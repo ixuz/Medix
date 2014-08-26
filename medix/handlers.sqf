@@ -13,7 +13,7 @@
 		MEDIX_EFFECT2 ppEffectAdjust [1.0, 1.0, 0.0, [0.0, 0.0, 0.0, 0.0], [0.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0]];
 		MEDIX_EFFECT2 ppEffectCommit 5;
 
-		[[player, false], "F_MEDIX_SetCaptive"] call BIS_fnc_MP;
+		[[player, false], "MEDIX_FNC_SETCAPTIVE"] call BIS_fnc_MP;
 	};
 };
 
@@ -65,6 +65,14 @@
 	};
 };
 
+MEDIX_EVT_UNCONSCIOUSINVEHICLE = {
+	waitUntil { vehicle player == player };
+	sleep 0.2;
+	MEDIX_EVT_UNCONSCIOUS = [player];
+	publicVariable "MEDIX_EVT_UNCONSCIOUS";
+	[player] spawn MEDIX_FNC_UNCONSCIOUS;
+};
+
 // Local Event Handlers
 MEDIX_EVT_HANDLEDAMAGE = {
 	MEDIX_CACHE_DAMAGE = damage player;
@@ -76,9 +84,24 @@ MEDIX_EVT_HANDLEDAMAGE = {
 		player setVariable ["MEDIX_ISBLEEDING", true, true];
 		player setVariable ["MEDIX_ISSTABILIZED", false, true];
 
-		MEDIX_EVT_UNCONSCIOUS = [player];
-		publicVariable "MEDIX_EVT_UNCONSCIOUS";
-		[player] spawn MEDIX_FNC_UNCONSCIOUS;
+		// Check if player is inside a vehicle
+		_playerInVehicle = nil;
+	    {
+	    	_vehicle = _x;
+	    	if (player in _vehicle) then {
+	    		hint format["Player is inside vehicle: %1", _vehicle];
+	    		_playerInVehicle = _vehicle;
+	    	};
+	    } forEach vehicles;
+	    if (!isNil "_playerInVehicle") then {
+	    	// If player is inside a vehicle, spawn a thread that waits until the player has left the vehicle, then put unconscious
+	    	[] spawn MEDIX_EVT_UNCONSCIOUSINVEHICLE;
+	    } else {
+	    	// If player is not in a vehicle, put unconscious
+			MEDIX_EVT_UNCONSCIOUS = [player];
+			publicVariable "MEDIX_EVT_UNCONSCIOUS";
+			[player] spawn MEDIX_FNC_UNCONSCIOUS;
+	    };
 	};
 
 	_hitPart = _this select 1;
