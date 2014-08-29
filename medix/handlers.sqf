@@ -76,11 +76,9 @@
 };
 
 MEDIX_EVT_UNCONSCIOUSINVEHICLE = {
-	hint "Waiting until player is not in vehicle";
 	sleep 1;
 	waitUntil { vehicle player == player };
 	sleep 1;
-	hint "Player left vehicle";
 	MEDIX_EVT_UNCONSCIOUS = [player];
 	publicVariable "MEDIX_EVT_UNCONSCIOUS";
 	[player] spawn MEDIX_FNC_UNCONSCIOUS;
@@ -102,7 +100,6 @@ MEDIX_EVT_HANDLEDAMAGE = {
 	    {
 	    	_vehicle = _x;
 	    	if (player in _vehicle) then {
-	    		hint format["Player is inside vehicle: %1", _vehicle];
 	    		_playerInVehicle = _vehicle;
 	    	};
 	    } forEach vehicles;
