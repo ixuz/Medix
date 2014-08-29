@@ -23,6 +23,11 @@ MEDIX_FNC_BLEED = {
 				MEDIX_CACHE_DAMAGE = MEDIX_CACHE_DAMAGE+_bleedSpeed;
 				player setDamage MEDIX_CACHE_DAMAGE;
 				// hint format["I'm bleeding, dmg: %1", MEDIX_CACHE_DAMAGE];
+
+				// Lower your voice in TFAR
+				if (MEDIX_PRP_TFAR) then {
+					TF_speak_volume_meters = TF_max_voice_volume min MEDIX_PRP_TFAR_RANGE;
+				};
 			};
 		};
 		sleep 1;

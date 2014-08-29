@@ -14,6 +14,11 @@
 		MEDIX_EFFECT2 ppEffectCommit 5;
 
 		[[player, false], "MEDIX_FNC_SETCAPTIVE"] call BIS_fnc_MP;
+
+		// Restore TFAR voice range to normal
+		if (MEDIX_PRP_TFAR) then {
+			TF_speak_volume_meters = 20;
+		};
 	};
 };
 
