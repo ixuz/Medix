@@ -175,3 +175,19 @@ MEDIX_FNC_UNCONSCIOUS = {
 		player enableSimulation false;
 	};
 };
+
+MEDIX_FNC_PUTDRAGGEDINCARGO = {
+	if (isNil "MEDIX_DRAGGINGUNIT") exitWith {};
+
+	MEDIX_UNITTOPUTINCARGO = MEDIX_DRAGGINGUNIT;
+	MEDIX_VEHICLE = cursorTarget;
+	[] spawn MEDIX_FNC_RELEASE;
+
+	waitUntil { (isNil "MEDIX_DRAGGINGUNIT") };
+
+	sleep 2;
+	if (MEDIX_VEHICLE isKindOf "LandVehicle" || MEDIX_VEHICLE isKindOf "Air") then {
+		MEDIX_EVT_MOVEDINTOCARGO = [MEDIX_UNITTOPUTINCARGO, MEDIX_VEHICLE];
+		publicVariable "MEDIX_EVT_MOVEDINTOCARGO";
+	};
+};

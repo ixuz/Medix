@@ -21,7 +21,8 @@ MEDIX_PERFORMING_ACTION = false;
 MEDIX_CACHE_DAMAGE = 0;
 MEDIX_ABORT = false;
 
-player addAction ["Suicide", MEDIX_FNC_SUICIDE, nil, 1, true, true, "", "_target == player && (player getVariable ""MEDIX_ISBLEEDING"")"];
+player addAction ["<t color='#FF9903'>Suicide</t>", MEDIX_FNC_SUICIDE, nil, 1, true, true, "", "_target == player && (player getVariable ""MEDIX_ISBLEEDING"")"];
+player addAction ["<t color='#FF9903'>Put soldier into vehicle</t>", MEDIX_FNC_PUTDRAGGEDINCARGO, nil, 25.5, true, true, "", "(!isNil ""MEDIX_DRAGGINGUNIT"") && (cursorTarget isKindOf ""LandVehicle"" || cursorTarget isKindOf ""Air"") && (player distance cursorTarget < 3)"];
 
 // Make sure postprocesses are to default on respawn
 MEDIX_EFFECT1 ppEffectAdjust [0.0];

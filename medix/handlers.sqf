@@ -65,9 +65,22 @@
 	};
 };
 
+"MEDIX_EVT_MOVEDINTOCARGO" addPublicVariableEventHandler {
+	_player = (_this select 1 select 0);
+	_vehicle = (_this select 1 select 1);
+	if (_player == player) then {
+		player enableSimulation true;
+		_player moveInCargo _vehicle;
+		[] spawn MEDIX_EVT_UNCONSCIOUSINVEHICLE;
+	};
+};
+
 MEDIX_EVT_UNCONSCIOUSINVEHICLE = {
+	hint "Waiting until player is not in vehicle";
+	sleep 1;
 	waitUntil { vehicle player == player };
-	sleep 0.2;
+	sleep 1;
+	hint "Player left vehicle";
 	MEDIX_EVT_UNCONSCIOUS = [player];
 	publicVariable "MEDIX_EVT_UNCONSCIOUS";
 	[player] spawn MEDIX_FNC_UNCONSCIOUS;

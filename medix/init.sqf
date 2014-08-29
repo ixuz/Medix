@@ -22,7 +22,7 @@ MEDIX_FNC_BLEED = {
 			if (player getVariable "MEDIX_ISBLEEDING") then {
 				MEDIX_CACHE_DAMAGE = MEDIX_CACHE_DAMAGE+_bleedSpeed;
 				player setDamage MEDIX_CACHE_DAMAGE;
-				hint format["I'm bleeding, dmg: %1", MEDIX_CACHE_DAMAGE];
+				// hint format["I'm bleeding, dmg: %1", MEDIX_CACHE_DAMAGE];
 			};
 		};
 		sleep 1;
