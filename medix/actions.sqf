@@ -20,6 +20,9 @@ MEDIX_FNC_CHECKPULSE = {
 		if ((_actionObject getVariable "MEDIX_ACT_ID_DRAGRELEASE") == -1) then {
 			[[_actionObject, "<t color='#FF9903'>Drag</t>", MEDIX_FNC_DRAG, "MEDIX_ACT_ID_DRAG", 28, "_target != player && !MEDIX_PERFORMING_ACTION && ((player distance _target) < MEDIX_PRP_TREATRANGE) && !(player getVariable ""MEDIX_ISBLEEDING"")"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
 		};
+		if ((_actionObject getVariable "MEDIX_ACT_ID_CARRYRELEASE") == -1) then {
+			[[_actionObject, "<t color='#FF9903'>Carry</t>", MEDIX_ACT_CARRY, "MEDIX_ACT_ID_CARRY", 28, "_target != player && !MEDIX_PERFORMING_ACTION && ((player distance _target) < MEDIX_PRP_TREATRANGE) && !(player getVariable ""MEDIX_ISBLEEDING"")"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
+		};
 		if ((_actionObject getVariable "MEDIX_ACT_ID_PRESSURERELEASE") == -1) then {
 			[[_actionObject, "<t color='#FF9903'>Direct Pressure</t>", MEDIX_FNC_PRESSURE, "MEDIX_ACT_ID_PRESSURE", 27, "_target != player && !MEDIX_PERFORMING_ACTION && ((player distance _target) < MEDIX_PRP_TREATRANGE) && !(player getVariable ""MEDIX_ISBLEEDING"")"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
 		};
@@ -116,6 +119,8 @@ MEDIX_FNC_TREAT = {
 		[[_actionObject, "MEDIX_ACT_ID_DRAGRELEASE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 		[[_actionObject, "MEDIX_ACT_ID_PRESSURE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 		[[_actionObject, "MEDIX_ACT_ID_PRESSURERELEASE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+		[[_actionObject, "MEDIX_ACT_ID_CARRY"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+		[[_actionObject, "MEDIX_ACT_ID_CARRYRELEASE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 	};
 	
 	MEDIX_PERFORMING_ACTION = false;
@@ -156,6 +161,42 @@ MEDIX_FNC_PRESSURE = {
 	player switchMove "AinvPknlMstpSnonWrflDnon_medic0s";
 	waitUntil { (animationState player != "AinvPknlMstpSnonWrflDnon_medic0s") };
 	MEDIX_PRESSUREUNIT setVariable ["MEDIX_ISPRESSURE", false, true];
+	MEDIX_PERFORMING_ACTION = false;
+};
+
+MEDIX_ACT_CARRY = {
+	_actionObject = _this select 0;
+	MEDIX_CARRYING = _actionObject;
+
+	MEDIX_PERFORMING_ACTION = true;
+
+	player playMoveNow "amovpercmstpsraswrfldnon";
+
+	MEDIX_EVT_CARRIED_UP = [player, MEDIX_CARRYING];
+	publicVariable "MEDIX_EVT_CARRIED_UP";
+
+	waitUntil { animationState player == "amovpercmstpsraswrfldnon" };
+	player setVariable ["MEDIX_ANI_READY", true, true];
+
+	waitUntil { (MEDIX_CARRYING getVariable "MEDIX_ANI_READY") };
+	sleep 1;
+
+	player playMoveNow "AcinPknlMstpSrasWrflDnon_AcinPercMrunSrasWrflDnon";
+	[[_actionObject, "MEDIX_ACT_ID_CARRY"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+	[player, "<t color='#FF9903'>Release</t>", MEDIX_ACT_CARRYRELEASE, "MEDIX_ACT_ID_CARRYRELEASE", 31, ""] spawn MEDIX_ADDACTION;
+};
+
+MEDIX_ACT_CARRYRELEASE = {
+	player playMoveNow "acinpercmrunsraswrfldf_amovpercmstpslowwrfldnon";
+
+	MEDIX_EVT_CARRIED_DOWN = [player, MEDIX_CARRYING];
+	publicVariable "MEDIX_EVT_CARRIED_DOWN";
+	
+	[player, "MEDIX_ACT_ID_CARRYRELEASE"] spawn MEDIX_REMOVEACTION;
+	[[MEDIX_CARRYING, "<t color='#FF9903'>Carry</t>", MEDIX_ACT_CARRY, "MEDIX_ACT_ID_CARRY", 28, "_target != player && !MEDIX_PERFORMING_ACTION && ((player distance _target) < MEDIX_PRP_TREATRANGE) && !(player getVariable ""MEDIX_ISBLEEDING"")"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
+	
+	MEDIX_CARRYING = nil;
+
 	MEDIX_PERFORMING_ACTION = false;
 };
 

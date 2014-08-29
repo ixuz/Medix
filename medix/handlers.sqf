@@ -1,3 +1,28 @@
+MEDIX_EVT_CARRY = {
+	_actionObject = _this select 0;
+	_carrier = _actionObject;
+	player enableSimulation true;
+	player playMoveNow "ainjppnemstpsnonwrfldnon_rolltoback";
+	waitUntil { animationState player == "ainjppnemstpsnonwrfldnon_rolltoback" };
+	player setVariable ["MEDIX_ANI_READY", true, true];
+
+	waitUntil { (_carrier getVariable "MEDIX_ANI_READY") };
+	sleep 1;
+	player attachTo [_carrier, [0.35, 0.1, 0] ]; 
+	player setDir 180;
+
+	player playMoveNow "AinjPfalMstpSnonWrflDnon_carried_up";
+	waitUntil { animationState player == "AinjPfalMstpSnonWrflDnon_carried_still" };
+	player attachTo [_carrier, [0.15, 0.1, 0] ]; 
+	player setDir 0;
+};
+
+MEDIX_EVT_CARRYRELEASE = {
+	player playMoveNow "AinjPfalMstpSnonWrflDnon_carried_down";
+	waitUntil { animationState player == "AinjPpneMstpSnonWrflDnon" };
+	detach player;
+};
+
 // Public Event handlers
 "MEDIX_EVT_TREATED" addPublicVariableEventHandler {
 	_treated = (_this select 1 select 0);
@@ -80,6 +105,22 @@
 		player enableSimulation true;
 		_player moveInCargo _vehicle;
 		[] spawn MEDIX_EVT_UNCONSCIOUSINVEHICLE;
+	};
+};
+
+"MEDIX_EVT_CARRIED_UP" addPublicVariableEventHandler {
+	_carrier = (_this select 1 select 0);
+	_carrying = (_this select 1 select 1);
+	if (_carrying == player) then {
+		[_carrier] spawn MEDIX_EVT_CARRY;
+	};
+};
+
+"MEDIX_EVT_CARRIED_DOWN" addPublicVariableEventHandler {
+	_carrier = (_this select 1 select 0);
+	_carrying = (_this select 1 select 1);
+	if (_carrying == player) then {
+		[] spawn MEDIX_EVT_CARRYRELEASE;
 	};
 };
 
