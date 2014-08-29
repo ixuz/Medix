@@ -26,9 +26,10 @@ MEDIX_FNC_BLEED = {
 
 				// Lower your voice in TFAR
 				if (MEDIX_PRP_TFAR) then {
-					// TF_speak_volume_meters = TF_max_voice_volume min MEDIX_PRP_TFAR_RANGE;
 					MEDIX_PRP_TFAR_RANGE call TFAR_fnc_setVoiceVolume;
-					player setVariable ["tf_unable_to_use_radio", true, true];
+					if (MEDIX_PRP_TFAR_RADIODISABLE) then {
+						player setVariable ["tf_unable_to_use_radio", true, true];
+					};
 				};
 			};
 		};

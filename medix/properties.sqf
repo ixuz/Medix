@@ -12,3 +12,4 @@ MEDIX_PRP_HELMDEFLECTDMG = 30; // The amount of health(percent) lost when helmet
 MEDIX_PRP_PRESSUREDEFFECT = 1.5; // When applying direct pressure to wounds, multiply remaining time with this
 MEDIX_PRP_TFAR = false; // If this is true, Medix will reduce your tfar voice range when unconscious.
 MEDIX_PRP_TFAR_RANGE = 3; // Medix will reduces your tfar voice to this range in meters
+MEDIX_PRP_TFAR_RADIODISABLE = true; // Medix will disable your radio communication when unconscious

@@ -17,9 +17,10 @@
 
 		// Restore TFAR voice range to normal
 		if (MEDIX_PRP_TFAR) then {
-			// TF_speak_volume_meters = 20;
 			20 call TFAR_fnc_setVoiceVolume;
-			player setVariable ["tf_unable_to_use_radio", false, true];
+			if (MEDIX_PRP_TFAR_RADIODISABLE) then {
+				player setVariable ["tf_unable_to_use_radio", false, true];
+			};
 		};
 	};
 };
