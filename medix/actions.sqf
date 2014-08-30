@@ -27,6 +27,7 @@ MEDIX_FNC_CHECKPULSE = {
 			[[_actionObject, "<t color='#FF9903'>Direct Pressure</t>", MEDIX_FNC_PRESSURE, "MEDIX_ACT_ID_PRESSURE", 27, "_target != player && !MEDIX_PERFORMING_ACTION && ((player distance _target) < MEDIX_PRP_TREATRANGE) && !(player getVariable ""MEDIX_ISBLEEDING"")"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
 		};
 	} else {
+		[[_actionObject, "<t color='#FF9903'>Take Dog Tag</t>", MEDIX_FNC_DOGTAG, "MEDIX_ACT_ID_DOGTAG", 29, "_target != player && ((player distance _target) < MEDIX_PRP_TREATRANGE)"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
 		[[_actionObject, "MEDIX_ACT_ID_HEAL"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 		[[_actionObject, "MEDIX_ACT_ID_CHECKPULSE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 		[[_actionObject, "MEDIX_ACT_ID_STABILIZE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
@@ -35,6 +36,8 @@ MEDIX_FNC_CHECKPULSE = {
 		[[_actionObject, "MEDIX_ACT_ID_DRAGRELEASE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 		[[_actionObject, "MEDIX_ACT_ID_PRESSURE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 		[[_actionObject, "MEDIX_ACT_ID_PRESSURERELEASE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+		[[_actionObject, "MEDIX_ACT_ID_CARRY"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+		[[_actionObject, "MEDIX_ACT_ID_CARRYRELEASE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 	};
 };
 
@@ -231,4 +234,11 @@ MEDIX_FNC_PUTDRAGGEDINCARGO = {
 		MEDIX_EVT_MOVEDINTOCARGO = [MEDIX_UNITTOPUTINCARGO, MEDIX_VEHICLE];
 		publicVariable "MEDIX_EVT_MOVEDINTOCARGO";
 	};
+};
+
+MEDIX_FNC_DOGTAG = {
+	_actionObject = _this select 0;
+
+	hint format["Dog tag: %1", (_actionObject getVariable "MEDIX_DOGTAG")];
+	[_actionObject, "MEDIX_ACT_ID_DOGTAG"] spawn MEDIX_REMOVEACTION;
 };
