@@ -2,6 +2,7 @@
 waitUntil {alive player};
 sleep 1;
 
+
 MEDIX_ACTIVE = false;
 
 MEDIX_FNC_SWITCHMOVE = compileFinal "_this select 0 switchMove (_this select 1);";
@@ -12,6 +13,10 @@ MEDIX_FNC_SETCAPTIVE = compileFinal "_this select 0 setcaptive (_this select 1);
 [] execVM "medix\effects.sqf";
 [] execVM "medix\actionmenu.sqf";
 [] execVM "medix\actions.sqf";
+
+MEDIX_PRP_TFAR = (_this select 0);
+hint format["TFAR LEVEL: %1", MEDIX_PRP_TFAR];
+sleep 5;
 
 MEDIX_FNC_BLEED = {
 	while {1==1} do {
@@ -25,12 +30,9 @@ MEDIX_FNC_BLEED = {
 				// hint format["I'm bleeding, dmg: %1", MEDIX_CACHE_DAMAGE];
 
 				// Lower your voice in TFAR
-				if (MEDIX_PRP_TFAR) then {
-					MEDIX_PRP_TFAR_RANGE call TFAR_fnc_setVoiceVolume;
-					if (MEDIX_PRP_TFAR_RADIODISABLE) then {
-						player setVariable ["tf_unable_to_use_radio", true, true];
-					};
-				};
+				if (MEDIX_PRP_TFAR > 0) then { 5 call TFAR_fnc_setVoiceVolume; };
+				if (MEDIX_PRP_TFAR > 1) then { player setVariable ["tf_unable_to_use_radio", true, true]; };
+				if (MEDIX_PRP_TFAR > 2) then { 0.1 call TFAR_fnc_setVoiceVolume; };
 			};
 		};
 		sleep 1;

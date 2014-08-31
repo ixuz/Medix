@@ -10,6 +10,3 @@ MEDIX_PRP_HELMDEFLECTDISTANCE = 20; // Helmet deflection may occur at distances 
 MEDIX_PHP_HELMDEFLECTCHANCE = 70; // The chance(percent) of your helmet deflecting a bullet
 MEDIX_PRP_HELMDEFLECTDMG = 30; // The amount of health(percent) lost when helmet deflected a bullet
 MEDIX_PRP_PRESSUREDEFFECT = 1.5; // When applying direct pressure to wounds, multiply remaining time with this
-MEDIX_PRP_TFAR = false; // If this is true, Medix will reduce your tfar voice range when unconscious.
-MEDIX_PRP_TFAR_RANGE = 3; // Medix will reduces your tfar voice to this range in meters
-MEDIX_PRP_TFAR_RADIODISABLE = true; // Medix will disable your radio communication when unconscious

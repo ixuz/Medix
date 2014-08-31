@@ -41,12 +41,8 @@ MEDIX_EVT_CARRYRELEASE = {
 		[[player, false], "MEDIX_FNC_SETCAPTIVE"] call BIS_fnc_MP;
 
 		// Restore TFAR voice range to normal
-		if (MEDIX_PRP_TFAR) then {
-			20 call TFAR_fnc_setVoiceVolume;
-			if (MEDIX_PRP_TFAR_RADIODISABLE) then {
-				player setVariable ["tf_unable_to_use_radio", false, true];
-			};
-		};
+		if (MEDIX_PRP_TFAR > 0) then { 20 call TFAR_fnc_setVoiceVolume; };
+		if (MEDIX_PRP_TFAR > 1) then { player setVariable ["tf_unable_to_use_radio", false, true]; };
 	};
 };
 
