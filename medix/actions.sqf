@@ -60,7 +60,7 @@ MEDIX_FNC_STABILIZE = {
 	_treatmentCompletedAtTime = (_treatmentStartedAtTime+_treatmentDuration);
 	player switchMove "AinvPknlMstpSnonWrflDnon_medic0s";
 
-	waitUntil { ((animationState player != "AinvPknlMstpSnonWrflDnon_medic0s") || (time >= _treatmentCompletedAtTime)) };
+	waitUntil { ((animationState player != "AinvPknlMstpSnonWrflDnon_medic0s") || (time >= _treatmentCompletedAtTime) || MEDIX_ABORT) };
 	[[player, "AinvPercMstpSnonWrflDnon"], "MEDIX_FNC_SWITCHMOVENOW"] call BIS_fnc_MP;
 
 	// Check whether the treatment was completed or aborted
@@ -87,6 +87,7 @@ MEDIX_FNC_STABILIZE = {
 
 	MEDIX_PERFORMING_ACTION = false;
 	MEDIX_TREATINGUNIT = nil;
+	MEDIX_ABORT = false;
 };
 
 MEDIX_FNC_TREAT = {
@@ -107,7 +108,7 @@ MEDIX_FNC_TREAT = {
 	_treatmentDuration = 38;
 	_treatmentCompletedAtTime = (_treatmentStartedAtTime+_treatmentDuration);
 	player switchMove "AinvPknlMstpSnonWrflDnon_medic0s";
-	waitUntil { ((animationState player != "AinvPknlMstpSnonWrflDnon_medic0s") || (time >= _treatmentCompletedAtTime)) };
+	waitUntil { ((animationState player != "AinvPknlMstpSnonWrflDnon_medic0s") || (time >= _treatmentCompletedAtTime) || MEDIX_ABORT) };
 	[[player, "AinvPercMstpSnonWrflDnon"], "MEDIX_FNC_SWITCHMOVENOW"] call BIS_fnc_MP;
 
 	// Check whether the treatment was completed or aborted
@@ -143,6 +144,7 @@ MEDIX_FNC_TREAT = {
 	
 	MEDIX_PERFORMING_ACTION = false;
 	MEDIX_TREATINGUNIT = nil;
+	MEDIX_ABORT = false;
 };
 
 MEDIX_FNC_DRAG = {
