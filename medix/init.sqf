@@ -15,8 +15,6 @@ MEDIX_FNC_SETCAPTIVE = compileFinal "_this select 0 setcaptive (_this select 1);
 [] execVM "medix\actions.sqf";
 
 MEDIX_PRP_TFAR = (_this select 0);
-hint format["TFAR LEVEL: %1", MEDIX_PRP_TFAR];
-sleep 5;
 
 MEDIX_FNC_BLEED = {
 	while {1==1} do {

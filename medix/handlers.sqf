@@ -87,9 +87,17 @@ MEDIX_EVT_CARRYRELEASE = {
 
 "MEDIX_EVT_ISKILLED" addPublicVariableEventHandler {
 	_killed = (_this select 1 select 0);
+
 	if (!isNil "MEDIX_DRAGGINGUNIT") then {
 		if (MEDIX_DRAGGINGUNIT == _killed) then {
 			[] spawn MEDIX_FNC_RELEASE;
+		};
+	};
+
+	if (!isNil "MEDIX_TREATINGUNIT") then {
+		if (MEDIX_TREATINGUNIT == _killed) then {
+			hint format["%1 died in your hands", (MEDIX_TREATINGUNIT getVariable "MEDIX_DOGTAG")];
+			[] spawn MEDIX_ACTION_ABORT;
 		};
 	};
 };
@@ -162,8 +170,6 @@ MEDIX_EVT_HANDLEDAMAGE = {
 	_hitPart = _this select 1;
 	_source = _this select 3;
 
-	// [] spawn MEDIX_EFX_REGULARHIT;
-
 	if ((player distance _source) > MEDIX_PRP_HELMDEFLECTDISTANCE) then {
 		if (_hitPart == "head" || _hitPart == "") then {
 			if (_hitDmg > 0.8) then {
@@ -188,5 +194,15 @@ MEDIX_EVT_KILLED = {
 	MEDIX_EFFECT2 ppEffectCommit 5;
 	MEDIX_CACHE_DAMAGE = 0;
 	MEDIX_ACTIVE = false;
+
+	[[player, "MEDIX_ACT_ID_HEAL"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+	[[player, "MEDIX_ACT_ID_STABILIZE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+	[[player, "MEDIX_ACT_ID_FULLTREATMENT"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+	[[player, "MEDIX_ACT_ID_DRAG"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+	[[player, "MEDIX_ACT_ID_DRAGRELEASE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+	[[player, "MEDIX_ACT_ID_PRESSURE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+	[[player, "MEDIX_ACT_ID_PRESSURERELEASE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+	[[player, "MEDIX_ACT_ID_CARRY"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+	[[player, "MEDIX_ACT_ID_CARRYRELEASE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 };
 player addEventHandler ["killed", MEDIX_EVT_KILLED];

@@ -2,6 +2,7 @@ MEDIX_ACTION_ABORT = {
 	[[player, "AinvPknlMstpSnonWrflDnon_medicEnd"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP;
 	player enableSimulation true;
 	MEDIX_ABORT = true;
+	MEDIX_TREATINGUNIT = nil;
 };
 
 MEDIX_FNC_CHECKPULSE = {
@@ -51,18 +52,21 @@ MEDIX_FNC_STABILIZE = {
 
 	MEDIX_PERFORMING_ACTION = true;
 
-	[player, "<t color='#FF9903'>Abort action</t>", MEDIX_ACTION_ABORT, "MEDIX_ACT_ID_ABORT", 31, ""] spawn MEDIX_ADDACTION;
+	hint "Moving will cancel treatment";
 
 	// Stabilize animation sequence
-	MEDIX_ABORT = false;
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medic0"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 3.225; };
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medic1"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 3.846; };
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medic2"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 4.263; };
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medicEnd"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 2.000; };
+	_treatmentStartedAtTime = time;
+	_treatmentDuration = 14;
+	_treatmentCompletedAtTime = (_treatmentStartedAtTime+_treatmentDuration);
+	player switchMove "AinvPknlMstpSnonWrflDnon_medic0s";
+	waitUntil { ((animationState player != "AinvPknlMstpSnonWrflDnon_medic0s") || (time >= _treatmentCompletedAtTime)) };
+	[[player, "AinvPknlMstpSnonWrflDnon_medicEnd"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP;
 
-	[player, "MEDIX_ACT_ID_ABORT"] spawn MEDIX_REMOVEACTION;
+	// Check whether the treatment was completed or aborted
+	_treatment_completed = false;
+	if ((time >= _treatmentCompletedAtTime)) then { _treatment_completed = true; };
 
-	if (!MEDIX_ABORT) then {
+	if (_treatment_completed) then {
 		MEDIX_TREATINGUNIT setVariable ["MEDIX_ISSTABILIZED", true, true];
 
 		// Remove a first aid kit
@@ -73,9 +77,15 @@ MEDIX_FNC_STABILIZE = {
 
 		[[_actionObject, "MEDIX_ACT_ID_STABILIZE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 		[[_actionObject, "<t color='#FF2203'>Full Medical Treament</t>", MEDIX_FNC_TREAT, "MEDIX_ACT_ID_FULLTREATMENT", 30, "_target != player && (""FirstAidKit"" in (items player)) && (""Medikit"" in (items player)) && !MEDIX_PERFORMING_ACTION && ((player distance _target) < MEDIX_PRP_TREATRANGE) && !(player getVariable ""MEDIX_ISBLEEDING"")"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
+		hint format["You have treated %1", (MEDIX_TREATINGUNIT getVariable "MEDIX_DOGTAG")];
+	}
+	else
+	{
+		hint "Treatment aborted";
 	};
 
 	MEDIX_PERFORMING_ACTION = false;
+	MEDIX_TREATINGUNIT = nil;
 };
 
 MEDIX_FNC_TREAT = {
@@ -89,23 +99,21 @@ MEDIX_FNC_TREAT = {
 
 	MEDIX_PERFORMING_ACTION = true;
 
-	[player, "<t color='#FF9903'>Abort action</t>", MEDIX_ACTION_ABORT, "MEDIX_ACT_ID_ABORT", 31, ""] spawn MEDIX_ADDACTION;
+	hint "Moving will cancel treatment";
 
 	// Full medical treatment animation sequence
-	MEDIX_ABORT = false;
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medic0"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 3.225; };
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medic1"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 3.846; };
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medic2"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 4.263; };
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medic3"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 5.000; };
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medic4"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 7.692; };
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medic0"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 3.225; };
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medic1"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 3.846; };
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medic3"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 5.000; };
-	if (!MEDIX_ABORT) then { [[player, "AinvPknlMstpSnonWrflDnon_medicEnd"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP; sleep 2.000; };
+	_treatmentStartedAtTime = time;
+	_treatmentDuration = 38;
+	_treatmentCompletedAtTime = (_treatmentStartedAtTime+_treatmentDuration);
+	player switchMove "AinvPknlMstpSnonWrflDnon_medic0s";
+	waitUntil { ((animationState player != "AinvPknlMstpSnonWrflDnon_medic0s") || (time >= _treatmentCompletedAtTime)) };
+	[[player, "AinvPknlMstpSnonWrflDnon_medicEnd"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP;
 
-	[player, "MEDIX_ACT_ID_ABORT"] spawn MEDIX_REMOVEACTION;
+	// Check whether the treatment was completed or aborted
+	_treatment_completed = false;
+	if ((time >= _treatmentCompletedAtTime)) then { _treatment_completed = true; };
 
-	if (!MEDIX_ABORT) then {
+	if (_treatment_completed) then {
 		MEDIX_TREATINGUNIT setVariable ["MEDIX_ISBLEEDING", false, true];
 
 		// Remove a first aid kit
@@ -124,9 +132,16 @@ MEDIX_FNC_TREAT = {
 		[[_actionObject, "MEDIX_ACT_ID_PRESSURERELEASE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 		[[_actionObject, "MEDIX_ACT_ID_CARRY"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 		[[_actionObject, "MEDIX_ACT_ID_CARRYRELEASE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
+
+		hint format["You have treated %1", (MEDIX_TREATINGUNIT getVariable "MEDIX_DOGTAG")];
+	}
+	else
+	{
+		hint "Treatment aborted";
 	};
 	
 	MEDIX_PERFORMING_ACTION = false;
+	MEDIX_TREATINGUNIT = nil;
 };
 
 MEDIX_FNC_DRAG = {
