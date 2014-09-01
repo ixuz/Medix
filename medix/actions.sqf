@@ -59,8 +59,9 @@ MEDIX_FNC_STABILIZE = {
 	_treatmentDuration = 14;
 	_treatmentCompletedAtTime = (_treatmentStartedAtTime+_treatmentDuration);
 	player switchMove "AinvPknlMstpSnonWrflDnon_medic0s";
+
 	waitUntil { ((animationState player != "AinvPknlMstpSnonWrflDnon_medic0s") || (time >= _treatmentCompletedAtTime)) };
-	[[player, "AinvPknlMstpSnonWrflDnon_medicEnd"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP;
+	[[player, "AinvPercMstpSnonWrflDnon"], "MEDIX_FNC_SWITCHMOVENOW"] call BIS_fnc_MP;
 
 	// Check whether the treatment was completed or aborted
 	_treatment_completed = false;
@@ -107,7 +108,7 @@ MEDIX_FNC_TREAT = {
 	_treatmentCompletedAtTime = (_treatmentStartedAtTime+_treatmentDuration);
 	player switchMove "AinvPknlMstpSnonWrflDnon_medic0s";
 	waitUntil { ((animationState player != "AinvPknlMstpSnonWrflDnon_medic0s") || (time >= _treatmentCompletedAtTime)) };
-	[[player, "AinvPknlMstpSnonWrflDnon_medicEnd"], "MEDIX_FNC_PLAYMOVENOW"] call BIS_fnc_MP;
+	[[player, "AinvPercMstpSnonWrflDnon"], "MEDIX_FNC_SWITCHMOVENOW"] call BIS_fnc_MP;
 
 	// Check whether the treatment was completed or aborted
 	_treatment_completed = false;
@@ -224,14 +225,16 @@ MEDIX_FNC_SUICIDE = {
 
 MEDIX_FNC_UNCONSCIOUS = {
 	_unit = _this select 0;
-	_unit playAction "Unconscious";
+	//_unit playAction "Unconscious";
+	_unit playMoveNow "AinjPpneMstpSnonWrflDnon";
 
 	MEDIX_UNCONSCIOUS_UNIT = _unit;
 	[[MEDIX_UNCONSCIOUS_UNIT, true], "MEDIX_FNC_SETCAPTIVE"] call BIS_fnc_MP;
 	if (_unit == player) then {
 		[[player, "<t color='#FF9903'>Check pulse</t>", MEDIX_FNC_CHECKPULSE, "MEDIX_ACT_ID_CHECKPULSE", 26, "_target != player && !MEDIX_PERFORMING_ACTION && ((player distance _target) < MEDIX_PRP_TREATRANGE) && !(player getVariable ""MEDIX_ISBLEEDING"")"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
 		sleep 2;
-		player enableSimulation false;
+		// player enableSimulation false;
+		MEDIX_CACHE_UNCONSCIOUS_DIRECTION = direction player;
 	};
 };
 

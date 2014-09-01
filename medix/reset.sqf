@@ -19,6 +19,7 @@ player setVariable ["MEDIX_EVT_DRAGGED", false, true];
 player setVariable ["MEDIX_EVT_ISKILLED", false, true];
 player setVariable ["MEDIX_ANI_READY", false, true];
 player setVariable ["MEDIX_DOGTAG", (name player), true];
+player setVariable ["MEDIX_CACHE_UNCONSCIOUS_DIRECTION", 0, true];
 MEDIX_DRAGGINGUNIT = nil;
 MEDIX_TREATINGUNIT = nil;
 MEDIX_PRESSUREUNIT = nil;

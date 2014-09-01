@@ -9,18 +9,22 @@ MEDIX_EVT_CARRY = {
 	waitUntil { (_carrier getVariable "MEDIX_ANI_READY") };
 	sleep 1;
 	player attachTo [_carrier, [0.35, 0.1, 0] ]; 
-	player setDir 180;
+	// player setDir 180;
+	player setVariable ["MEDIX_CACHE_UNCONSCIOUS_DIRECTION", 180, true];
 
 	player playMoveNow "AinjPfalMstpSnonWrflDnon_carried_up";
 	waitUntil { animationState player == "AinjPfalMstpSnonWrflDnon_carried_still" };
 	player attachTo [_carrier, [0.15, 0.1, 0] ]; 
-	player setDir 0;
+	// player setDir 0;
+	player setVariable ["MEDIX_CACHE_UNCONSCIOUS_DIRECTION", 0, true];
 };
 
 MEDIX_EVT_CARRYRELEASE = {
+	_carrier = _this select 0;
 	player playMoveNow "AinjPfalMstpSnonWrflDnon_carried_down";
 	waitUntil { animationState player == "AinjPpneMstpSnonWrflDnon" };
 	detach player;
+	player setVariable ["MEDIX_CACHE_UNCONSCIOUS_DIRECTION", (direction _carrier)+180, true];
 };
 
 // Public Event handlers
@@ -64,8 +68,10 @@ MEDIX_EVT_CARRYRELEASE = {
 	_dragger = (_this select 1 select 1);
 	_dragged attachTo [_dragger, [0, 1.1, 0.092]];
 	_dragged switchMove "AinjPpneMstpSnonWrflDb";
-	_dragged setDir 180;
+	// _dragged setDir 180;
+
 	if (_dragged == player) then {
+		player setVariable ["MEDIX_CACHE_UNCONSCIOUS_DIRECTION", 180, true];
 		player enableSimulation false;
 	};
 };
@@ -124,7 +130,7 @@ MEDIX_EVT_CARRYRELEASE = {
 	_carrier = (_this select 1 select 0);
 	_carrying = (_this select 1 select 1);
 	if (_carrying == player) then {
-		[] spawn MEDIX_EVT_CARRYRELEASE;
+		[_carrier] spawn MEDIX_EVT_CARRYRELEASE;
 	};
 };
 

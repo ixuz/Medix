@@ -38,6 +38,19 @@ MEDIX_FNC_BLEED = {
 };
 [] spawn MEDIX_FNC_BLEED;
 
+
+MEDIX_FNC_UNCONSCIOUS_ROTATION_DISABLE = {
+	while {1==1} do {
+		if (player getVariable "MEDIX_ISBLEEDING") then {
+			player setDir (player getVariable "MEDIX_CACHE_UNCONSCIOUS_DIRECTION");
+			waitUntil { (player getVariable "MEDIX_CACHE_UNCONSCIOUS_DIRECTION") != direction player };
+		} else {
+			sleep 0.1;
+		};
+	};
+};
+[] spawn MEDIX_FNC_UNCONSCIOUS_ROTATION_DISABLE;
+
 while {true} do
 {
 	// Wait for player to spawn
