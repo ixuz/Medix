@@ -1,6 +1,9 @@
 MEDIX_EVT_CARRY = {
 	_actionObject = _this select 0;
 	_carrier = _actionObject;
+
+	player setVariable ["MEDIX_ISCARRIED", true, true];
+
 	player enableSimulation true;
 	player playMoveNow "ainjppnemstpsnonwrfldnon_rolltoback";
 	waitUntil { animationState player == "ainjppnemstpsnonwrfldnon_rolltoback" };
@@ -25,6 +28,7 @@ MEDIX_EVT_CARRYRELEASE = {
 	waitUntil { animationState player == "AinjPpneMstpSnonWrflDnon" };
 	detach player;
 	player setVariable ["MEDIX_CACHE_UNCONSCIOUS_DIRECTION", (direction _carrier)+180, true];
+	player setVariable ["MEDIX_ISCARRIED", false, true];
 };
 
 // Public Event handlers
@@ -32,10 +36,11 @@ MEDIX_EVT_CARRYRELEASE = {
 	_treated = (_this select 1 select 0);
 	_treater = (_this select 1 select 1);
 	if (_treated == player) then {
+		player setVariable ["MEDIX_ISBLEEDING", false, true];
 		MEDIX_CACHE_DAMAGE = 1-(MEDIX_PRP_TREATRESULT/100);
 		player setDamage MEDIX_CACHE_DAMAGE;
 		player enableSimulation true;
-		player playAction "AgonyStop";
+		player switchMove "amovppnemstpsraswrfldnon";
 		hint format["You have been fully treated by %1", name _treater];
 		MEDIX_EFFECT1 ppEffectAdjust [0.0];
 		MEDIX_EFFECT1 ppEffectCommit 5;
@@ -73,6 +78,7 @@ MEDIX_EVT_CARRYRELEASE = {
 	if (_dragged == player) then {
 		player setVariable ["MEDIX_CACHE_UNCONSCIOUS_DIRECTION", 180, true];
 		player enableSimulation false;
+		player setVariable ["MEDIX_ISDRAGGED", true, true];
 	};
 };
 
@@ -88,6 +94,7 @@ MEDIX_EVT_CARRYRELEASE = {
 		MEDIX_EVT_UNCONSCIOUS = [_dragged];
 		publicVariable "MEDIX_EVT_UNCONSCIOUS";
 		[_dragged] spawn MEDIX_FNC_UNCONSCIOUS;
+		player setVariable ["MEDIX_ISDRAGGED", false, true];
 	};
 };
 
@@ -106,6 +113,9 @@ MEDIX_EVT_CARRYRELEASE = {
 			[] spawn MEDIX_ACTION_ABORT;
 		};
 	};
+
+	player setVariable ["MEDIX_ISDRAGGED", false, true];
+	player setVariable ["MEDIX_ISCARRIED", false, true];
 };
 
 "MEDIX_EVT_MOVEDINTOCARGO" addPublicVariableEventHandler {
@@ -178,10 +188,13 @@ MEDIX_EVT_HANDLEDAMAGE = {
 
 	if ((player distance _source) > MEDIX_PRP_HELMDEFLECTDISTANCE) then {
 		if (_hitPart == "head" || _hitPart == "") then {
-			if (_hitDmg > 0.8) then {
+			//hint "trigger1";
+			if (_hitDmg > 0.6) then {
+				//hint format["trigger2\nhitPart: %1\nhitDmg: %2", _hitPart, _hitDmg];
 				_rand = random 1;
-				if (_rand > (1-(MEDIX_PHP_HELMDEFLECTCHANCE/100))) then {
-					_hitDmg = (damage player) + (MEDIX_PRP_HELMDEFLECTDMG/100);
+				if (_rand > (1-(MEDIX_PRP_HELMDEFLECTCHANCE/100))) then {
+					//hint "trigger3";
+					_hitDmg = 0; //(damage player) + (MEDIX_PRP_HELMDEFLECTDMG/100);
 					[] spawn MEDIX_EFX_HELMETHIT;
 				};
 			};
@@ -201,6 +214,8 @@ MEDIX_EVT_KILLED = {
 	MEDIX_CACHE_DAMAGE = 0;
 	MEDIX_ACTIVE = false;
 
+	[[player, "<t color='#FF9903'>Check pulse</t>", MEDIX_FNC_CHECKPULSE, "MEDIX_ACT_ID_CHECKPULSE", 26, "_target != player && !MEDIX_PERFORMING_ACTION && ((player distance _target) < MEDIX_PRP_TREATRANGE) && !(player getVariable ""MEDIX_ISBLEEDING"")"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
+		
 	[[player, "MEDIX_ACT_ID_HEAL"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 	[[player, "MEDIX_ACT_ID_STABILIZE"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;
 	[[player, "MEDIX_ACT_ID_FULLTREATMENT"], "MEDIX_REMOVEACTION"] call BIS_fnc_MP;

@@ -21,9 +21,9 @@ MEDIX_FNC_CHECKPULSE = {
 		if ((_actionObject getVariable "MEDIX_ACT_ID_DRAGRELEASE") == -1) then {
 			[[_actionObject, "<t color='#FF9903'>Drag</t>", MEDIX_FNC_DRAG, "MEDIX_ACT_ID_DRAG", 28, "_target != player && !MEDIX_PERFORMING_ACTION && ((player distance _target) < MEDIX_PRP_TREATRANGE) && !(player getVariable ""MEDIX_ISBLEEDING"")"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
 		};
-		if ((_actionObject getVariable "MEDIX_ACT_ID_CARRYRELEASE") == -1) then {
-			[[_actionObject, "<t color='#FF9903'>Carry</t>", MEDIX_ACT_CARRY, "MEDIX_ACT_ID_CARRY", 28, "_target != player && !MEDIX_PERFORMING_ACTION && ((player distance _target) < MEDIX_PRP_TREATRANGE) && !(player getVariable ""MEDIX_ISBLEEDING"")"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
-		};
+		//if ((_actionObject getVariable "MEDIX_ACT_ID_CARRYRELEASE") == -1) then {
+		//	[[_actionObject, "<t color='#FF9903'>Carry</t>", MEDIX_ACT_CARRY, "MEDIX_ACT_ID_CARRY", 28, "_target != player && !MEDIX_PERFORMING_ACTION && ((player distance _target) < MEDIX_PRP_TREATRANGE) && !(player getVariable ""MEDIX_ISBLEEDING"")"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
+		//};
 		if ((_actionObject getVariable "MEDIX_ACT_ID_PRESSURERELEASE") == -1) then {
 			[[_actionObject, "<t color='#FF9903'>Direct Pressure</t>", MEDIX_FNC_PRESSURE, "MEDIX_ACT_ID_PRESSURE", 27, "_target != player && !MEDIX_PERFORMING_ACTION && ((player distance _target) < MEDIX_PRP_TREATRANGE) && !(player getVariable ""MEDIX_ISBLEEDING"")"], "MEDIX_ADDACTION"] call BIS_fnc_MP;
 		};
@@ -57,6 +57,7 @@ MEDIX_FNC_STABILIZE = {
 	// Stabilize animation sequence
 	_treatmentStartedAtTime = time;
 	_treatmentDuration = 14;
+	//_treatmentDuration = 2;
 	_treatmentCompletedAtTime = (_treatmentStartedAtTime+_treatmentDuration);
 	player switchMove "AinvPknlMstpSnonWrflDnon_medic0s";
 
@@ -106,6 +107,7 @@ MEDIX_FNC_TREAT = {
 	// Full medical treatment animation sequence
 	_treatmentStartedAtTime = time;
 	_treatmentDuration = 38;
+	//_treatmentDuration = 4;
 	_treatmentCompletedAtTime = (_treatmentStartedAtTime+_treatmentDuration);
 	player switchMove "AinvPknlMstpSnonWrflDnon_medic0s";
 	waitUntil { ((animationState player != "AinvPknlMstpSnonWrflDnon_medic0s") || (time >= _treatmentCompletedAtTime) || MEDIX_ABORT) };

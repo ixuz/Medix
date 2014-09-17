@@ -15,6 +15,8 @@ player setVariable ["MEDIX_ISBLEEDING", false, true];
 player setVariable ["MEDIX_ISSTABILIZED", false, true];
 player setVariable ["MEDIX_ISPRESSURE", false, true];
 player setVariable ["MEDIX_ISKILLED", false, true];
+player setVariable ["MEDIX_ISDRAGGED", false, true];
+player setVariable ["MEDIX_ISCARRIED", false, true];
 player setVariable ["MEDIX_EVT_DRAGGED", false, true];
 player setVariable ["MEDIX_EVT_ISKILLED", false, true];
 player setVariable ["MEDIX_ANI_READY", false, true];
@@ -27,7 +29,6 @@ MEDIX_PERFORMING_ACTION = false;
 MEDIX_CACHE_DAMAGE = 0;
 MEDIX_ABORT = false;
 
-player addAction ["<t color='#FF9903'>Suicide</t>", MEDIX_FNC_SUICIDE, nil, 1, true, true, "", "_target == player && (player getVariable ""MEDIX_ISBLEEDING"")"];
 player addAction ["<t color='#FF9903'>Put soldier into vehicle</t>", MEDIX_FNC_PUTDRAGGEDINCARGO, nil, 25.5, true, true, "", "(!isNil ""MEDIX_DRAGGINGUNIT"") && (cursorTarget isKindOf ""LandVehicle"" || cursorTarget isKindOf ""Air"") && (player distance cursorTarget < 5)"];
 
 // Make sure postprocesses are to default on respawn

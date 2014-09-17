@@ -1,15 +1,9 @@
-// Enable screen effects
-MEDIX_EFFECT1 = ppEffectCreate ["dynamicBlur", 505];
-MEDIX_EFFECT1 ppEffectEnable true;
-MEDIX_EFFECT2 = ppEffectCreate ["colorCorrections", 1501];
-MEDIX_EFFECT2 ppEffectEnable true;
-
 MEDIX_EFX_HELMETHIT = {
 	addCamShake [155, 0.4, 2];
 	MEDIX_EFFECT1 ppEffectAdjust [5.0];
 	MEDIX_EFFECT1 ppEffectCommit 0;
 	MEDIX_EFFECT1 ppEffectAdjust [0.0];
-	MEDIX_EFFECT1 ppEffectCommit 60;
+	MEDIX_EFFECT1 ppEffectCommit 15;
 	sleep 0.4;
 	addCamShake [20, 60, 0.3];
 };
